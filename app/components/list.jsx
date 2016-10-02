@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import store from '../reducers';
 import actions from '../actions/add-user-actions';
 import _ from 'lodash';
+
 const FriendListApp = React.createClass({
     getInitialState(){
         let usersState = store.getState().usersState;
@@ -29,13 +30,13 @@ const FriendListApp = React.createClass({
     render () {
         console.log(this.state.usersState);
         return (
-            <div className="friendListApp">
-                <h1>The FriendList</h1>
+            <div className="list">
+                <span>The FriendList</span>
                 <button onClick={this.add}>Add</button>
                 <button onClick={this.clear}>Clear</button>
                 {_.map(this.state.usersState, (item,i) => {
                     return (
-                        <div key={i}>
+                        <div className="list-item" key={i}>
                             {item.name}
                             <button onClick={_.partial(this.delete, item.id)}>Delete</button>
                         </div>

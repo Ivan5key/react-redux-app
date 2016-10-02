@@ -3,21 +3,23 @@ require('../styles/app.less');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router, browserHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
-import List from './components/list';
+import HandlerView from './routes';
 import store from './reducers';
-//ReactDOM.render(<App />, document.getElementById('root'));
+
+const history = syncHistoryWithStore(browserHistory, store);
 
 const AppInitial = React.createClass({
     render() {
         return (
-          <div>
             <Provider store={store}>
-                <List/>
+                <Router history={history}>
+                    {HandlerView}
+                </Router>
             </Provider>
-          </div>
         );
     }
 });
-
 ReactDOM.render(<AppInitial />, document.getElementById('root'));

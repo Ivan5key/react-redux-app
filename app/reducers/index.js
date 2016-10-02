@@ -4,10 +4,13 @@ import _ from 'lodash';
 
 import { combineReducers, createStore } from 'redux';
 
-const reducers = combineReducers({
-    usersState: ListReducer
-});
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-const store = createStore(reducers);
+const store = createStore(
+    combineReducers({
+        usersState: ListReducer,
+        routing: routerReducer
+    })
+);
 
 export default store;
