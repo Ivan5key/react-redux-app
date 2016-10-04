@@ -14,9 +14,7 @@ const FriendListApp = React.createClass({
         };
     },
     add() {
-        console.log(actions);
         actions.addItem({id: Math.random(),name: 'UserName', number: '555', email: '@mail.com'});
-        console.log(store.getState());
         this.setState({usersState: store.getState().usersState});
     },
     delete(id) {
@@ -28,7 +26,6 @@ const FriendListApp = React.createClass({
         this.setState({usersState: store.getState().usersState});
     },
     render () {
-        console.log(this.state.usersState);
         return (
             <div className="list">
                 <span>The FriendList</span>

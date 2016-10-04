@@ -8,9 +8,9 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 const store = createStore(
     combineReducers({
-        usersState: ListReducer,
+        userState: ListReducer,
         routing: routerReducer
     })
 );
-
+console.log(store.getState());
 export default store;

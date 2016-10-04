@@ -1,3 +1,2 @@
-export const ADD = 'ADD';
-export const DELETE = 'DELETE';
-export const CLEAR = 'CLEAR';
+import constants from './constants.json';
+export {constants};

@@ -1,6 +1,6 @@
 'use strict';
 import _ from 'lodash';
-import * as constants from '../constants';
+import {constants} from '../constants';
 
 export default function users(state, action) {
     switch (action.type) {

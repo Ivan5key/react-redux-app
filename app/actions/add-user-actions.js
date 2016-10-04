@@ -1,15 +1,26 @@
 'use strict';
-import * as constants from '../constants';
+import {constants} from '../constants';
 import store from '../reducers';
+import Http from '../lib/http-request';
 
 const itemActions = {
-    addItem(action){
+    logIn(action) {
+        var request = new Http()
+        .Method('POST')
+        .queryParams(action)
+        .Exec();
         store.dispatch({
             type: constants.ADD,
             user: action
         });
     },
-    deleteItem(action){
+    addItem(action) {
+        store.dispatch({
+            type: constants.ADD,
+            user: action
+        });
+    },
+    deleteItem(action) {
         store.dispatch({
             type: constants.DELETE,
             id: action

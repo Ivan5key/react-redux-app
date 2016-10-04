@@ -1,13 +1,17 @@
 'use strict';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route } from 'react-router';
+import { Route, DefaultRoute, IndexRoute } from 'react-router';
 
-import View from './components/view';
-import List from './components/list';
+import {List} from './components';
+import {DDSapp} from './components';
+import {Header} from './components';
+import {Login} from './components';
 
 const HandlerView =
-    <Route path="/" handler={View}>
-        <Route path="/list" component={List} />
+    <Route path="/" component={DDSapp}>
+        <Route path="list" component={List} />
+        <Route path="login" component={Login} />
     </Route>;
+
 export default HandlerView;
