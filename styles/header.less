@@ -1,0 +1,40 @@
+.DDS-header {
+    width: 100%;
+
+    .nav-menu {
+        display: block;
+        height: 40px;
+        padding: 15px 10px;
+        margin: 0;
+        border: none;
+        background-color: #2D5559;
+        text-align: center;
+        text-transform: uppercase;
+
+        .item {
+            display: inline-block;
+            position: relative;
+            height: 100%;
+            margin-left: 20px;
+            padding-right: 20px;
+            border-right: 1px solid #7BA68D;
+            line-height: 40px;
+
+            a {
+                color: #7BA68D;
+                text-align: center;
+            }
+            &:last-child {
+                background-color: red;
+                border-right: 0;
+            }
+        }
+        .log-in-btn{
+            float: right;
+            width: 100px;
+            height: 100%;
+            line-height: 45px;
+            color: #7BA68D;
+        }
+    }
+}
