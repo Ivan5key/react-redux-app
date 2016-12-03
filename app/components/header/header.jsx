@@ -7,7 +7,7 @@ import {DDSheader} from '../../containers/header';
 const Header = React.createClass({
     render() {
         return (
-            <div>
+            <div className="DDS-header">
                 <DDSheader />
             </div>
         );

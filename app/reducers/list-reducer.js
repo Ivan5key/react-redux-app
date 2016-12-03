@@ -5,18 +5,14 @@ import {constants} from '../constants';
 export default function users(state, action) {
     switch (action.type) {
         case constants.ADD:
-            state.push(action.user);
-            break;
+            return _.assign({}, state, action.user);
         case constants.DELETE:
-            _.remove(state, (item) => {
-                return item.id == action.id;
-            });
-            break;
+            return _.remove(state, (item) => {
+                    return item.id == action.id;
+                });
         case constants.CLEAR:
-            state = [];
-            break;
+            return state;
         default:
-            state = [];
+            return state;
     }
-    return state;
 }

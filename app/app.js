@@ -7,17 +7,18 @@ import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import HandlerView from './routes';
-import store from './reducers';
+import {store, history} from './reducers';
 
-const history = syncHistoryWithStore(browserHistory, store);
+import { syncReduxAndRouter, routeReducer } from 'redux-simple-router';
+//const history = syncHistoryWithStore(browserHistory, store);
+
+//syncReduxAndRouter(history, store);
 
 const AppInitial = React.createClass({
     render() {
         return (
-            <Provider store={store}>
-                <Router history={history}>
-                    {HandlerView}
-                </Router>
+            <Provider store={store} dispatch={store.dispatch}>
+                <Router history={history} routes={HandlerView} />
             </Provider>
         );
     }

@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import store from '../reducers';
+import {store} from '../reducers';
 import actions from '../actions/add-user-actions';
 import _ from 'lodash';
 
@@ -26,11 +26,12 @@ const FriendListApp = React.createClass({
         this.setState({usersState: store.getState().usersState});
     },
     render () {
+        console.log(store.getState());
         return (
             <div className="list">
                 <span>The FriendList</span>
-                <button onClick={this.add}>Add</button>
-                <button onClick={this.clear}>Clear</button>
+                <button className="btn-action" onClick={this.add}>Add</button>
+                <button className="btn-action" onClick={this.clear}>Clear</button>
                 {_.map(this.state.usersState, (item,i) => {
                     return (
                         <div className="list-item" key={i}>
@@ -46,7 +47,7 @@ const FriendListApp = React.createClass({
 
 const mapStateToProps = function(store) {
   return {
-    users: store.userState
+    user: store.userState
   };
 };
 export default connect(mapStateToProps)(FriendListApp);

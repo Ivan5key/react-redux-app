@@ -1,13 +1,15 @@
 'use strict';
 import {constants} from '../constants';
-import store from '../reducers';
+import {store} from '../reducers';
 import Http from '../lib/http-request';
 
 const itemActions = {
     logIn(action) {
         var request = new Http()
-        .Method('POST')
-        .queryParams(action)
+        .UserAuth('ROOT','ROOT')
+        .Url('http://localhost:5001/login')
+        .Method('GET')
+        //.jsonBody(action)
         .Exec();
         store.dispatch({
             type: constants.ADD,
@@ -15,6 +17,7 @@ const itemActions = {
         });
     },
     addItem(action) {
+        console.log(action);
         store.dispatch({
             type: constants.ADD,
             user: action

@@ -1,5 +1,6 @@
 'use strict';
 import _ from 'lodash';
+import { Promise } from 'async-promise';
 
 function getXmlHttp(){
     var xmlhttp;
@@ -16,24 +17,30 @@ function getXmlHttp(){
         xmlhttp = new XMLHttpRequest();
     }
     return xmlhttp;
-}
+};
 
 const defaultParams = {
   executor: null,
-  url: 'http://localhost:3000',
+  url: 'http://localhost:5001/users',
   method: null,
   headers: {header: 'Content-Type', value: 'application/json'},
+  auth: '',
+  token: '',
   body: null,
   responseType: null,
   dynamicSegments: [],
   queryParams: []
- // bodyProcessor: identity,
- // responseProcessor: identity
+};
+
+const methodsHandlerMap = {
+  GET: getRequest,
+  POST: submitRequest,
+  PUT: submitRequest,
+  DELETE: submitRequest
 };
 
 function statusCode(statusCode) {
   const ok = (statusCode == 200) ? true : false;
-  console.log(ok);
   return ok;
 }
 
@@ -41,56 +48,93 @@ function addQueryParams(url, queryParams) {
   const part = _.map(queryParams, (key, value) => {
       return `${value}=${key}`;
   });
-  return url + (part.length !== 0 ? '?' + chanks.join('&') : '')
+  return url + (part.length !== 0 ? '?' + part.join('&') : '')
 };
 
-export default class Http {
-    constructor (params = defaultParams) {
-        this.internals = () => params;
-    }
+function submitRequest(headers, method, url, body, auth, callback) {
+    return new Promise((resolve, reject) => {
+        const xmlhttp = getXmlHttp();
 
-    Header(header, value) {
-        const headers = this.internals().headers.concat({header, value});
-        return new Http(Object.assign({}, this.internals(), {headers}));
-    }
-    Method(method) {
-        return new Http(Object.assign({}, this.internals(), {method}));
-    }
-    Url(url) {
-        return new Http(Object.assign({}, this.internals(), {url}));
-    }
-    queryParams(query) {
-        let {url} = this.internals();
-        let queryParams = addQueryParams(url, query);
-        return new Http(Object.assign({}, this.internals(), {queryParams}));
-    }
-    Body(body) {
-        return new Http(Object.assign({}, this.internals(), {body}));
-    }
-    jsonBody(jsonBody) {
-        let body = JSON.stringify(jsonBody);
-        return new Http(Object.assign({}, this.internals(), {body}));
-    }
-    Exec(){
-        const {headers, method, url, body, queryParams} = this.internals();
-        console.log(queryParams);
-        var xmlhttp = getXmlHttp();
         xmlhttp.open(method, url, true);
-
         xmlhttp.setRequestHeader(headers.header, headers.value);
-        xmlhttp.setRequestHeader('Authorization', 'Token');
+        xmlhttp.setRequestHeader(auth.header, auth.value);
 
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4) {
-                if(statusCode(xmlhttp.status)) {
-                    console.log(xmlhttp.responseText);
-                    status = xmlhttp.status;
+                if(true) {
+                    resolve(xmlhttp.responseText);
                 } else {
-                    status = xmlhttp.status;
+                    reject(xmlhttp.responseText);
                 }
             }
         };
         xmlhttp.send(body);
-        return (Object.assign({}, this.internals(), {status}));
+    });
+};
+
+function getRequest(headers, method, url, body, auth) {
+    return new Promise((resolve, reject) => {
+        const xmlhttp = getXmlHttp();
+        xmlhttp.open(method, url, true);
+        xmlhttp.setRequestHeader(headers.header, headers.value);
+        xmlhttp.setRequestHeader(auth.header, auth.value);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+                if(xmlhttp.status == 200) {
+                    resolve(xmlhttp.responseText);
+                } else {
+                    reject(xmlhttp.responseText);
+                }
+            }
+        };
+        xmlhttp.send(null);
+    });
+};
+class Http {
+    constructor (params = defaultParams) {
+        this.internals = () => params;
+    }
+    Header(header, value) {
+        const headers = this.internals().headers.concat({header, value});
+        return new Http(_.assign({}, this.internals(), {headers}));
+    }
+    Method(method) {
+        return new Http(_.assign({}, this.internals(), {method}));
+    }
+    Url(url) {
+        return new Http(_.assign({}, this.internals(), {url}));
+    }
+    queryParams(query) {
+        let {url} = this.internals();
+        let queryParams = addQueryParams(url, query);
+        return new Http(_.assign({}, this.internals(), {queryParams}));
+    }
+    Body(body) {
+        return new Http(_.assign({}, this.internals(), {body}));
+    }
+    jsonBody(jsonBody) {
+        let body = JSON.stringify(jsonBody);
+        return new Http(_.assign({}, this.internals(), {body}));
+    }
+    UserAuth(user, pass) {
+        let header = "Authorization";
+        let value = "Basic " + window.btoa(user + ":" + pass);
+        let auth = {header: header, value: value};
+        return new Http(_.assign({}, this.internals(), {auth}));
+    }
+    Auth(token){
+        let AuthToken = 'Token' + token;
+        return new Http(_.assign({}, this.internals(), {AuthToken}));
+    }
+    Exec(callback){
+        const {headers, method, url, body, queryParams, auth} = this.internals();
+        const handler = methodsHandlerMap[method];
+
+        if(!handler){
+            throw Error(`Method ${handler} is not supported`);
+        }
+        const response = handler(headers, method, url, body, auth);
+        return response;
     }
 };
+export default Http;

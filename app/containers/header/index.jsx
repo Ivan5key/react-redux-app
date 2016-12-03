@@ -1,6 +1,6 @@
 'use strict';
 
-import DDSheader from './DDSheader';
+import DDSheader from './DDS-header';
 
 export {
     DDSheader
